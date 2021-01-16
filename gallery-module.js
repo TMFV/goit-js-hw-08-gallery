@@ -71,6 +71,8 @@ const closeModalEscFn = (event) => {
 };
 const closeModalFn = (event) => {
     refs.modalHeadElement.classList.remove('is-open');
+    window.removeEventListener('keydown', closeModalEscFn); // delete keydown listener
+    window.removeEventListener('keydown', arrowSlide);// delete keydown listener
     refs.modalImg.src = '';
     refs.modalImg.alt = '';
     refs.modalImg.dataset.index = '';
@@ -88,25 +90,36 @@ window.addEventListener('keydown', closeModalEscFn);
 // add next and previous img for press LEFT and RIGHT
 //ArrowLeft
 //ArrowRight
+
+function showNextImg(arrEl, idx) {
+    refs.modalImg.src = arrEl.original;
+    refs.modalImg.alt = arrEl.description;
+    refs.modalImg.dataset.index = idx;
+}
 const arrowSlide = (e) => {
     if (refs.modalHeadElement.classList.contains('is-open')) {
         const refModalIndexData = refs.modalImg.dataset.index;
+        const idxImgDecrement = refModalIndexData - 1;
         if (e.key == 'ArrowLeft' && refModalIndexData != 0) {
-            refs.modalImg.src = imagesArray[refModalIndexData - 1].original;
-            refs.modalImg.alt = imagesArray[refModalIndexData - 1].description;
-            refs.modalImg.dataset.index = refModalIndexData - 1;
+            showNextImg(imagesArray[idxImgDecrement], idxImgDecrement);
+            //refs.modalImg.src = imagesArray[refModalIndexData - 1].original;
+            //refs.modalImg.alt = imagesArray[refModalIndexData - 1].description;
+            //refs.modalImg.dataset.index = refModalIndexData - 1;
         } else if (e.key == 'ArrowLeft' && refModalIndexData == 0) {
-            refs.modalImg.src = imagesArray[imgArrLength - 1].original;
-            refs.modalImg.alt = imagesArray[imgArrLength - 1].description;
-            refs.modalImg.dataset.index = imgArrLength - 1;
+            showNextImg(imagesArray[imgArrLength - 1], imgArrLength - 1);
+            //refs.modalImg.src = imagesArray[imgArrLength - 1].original;
+            //refs.modalImg.alt = imagesArray[imgArrLength - 1].description;
+            //refs.modalImg.dataset.index = imgArrLength - 1;
         } else if (e.key == 'ArrowRight' && refModalIndexData != imgArrLength - 1) {
-            refs.modalImg.src = imagesArray[refModalIndexData - 1 + 2].original;
-            refs.modalImg.alt = imagesArray[refModalIndexData - 1 + 2].description;
-            refs.modalImg.dataset.index = refModalIndexData - 1 + 2;
+            showNextImg(imagesArray[idxImgDecrement + 2], idxImgDecrement + 2)
+            //refs.modalImg.src = imagesArray[refModalIndexData - 1 + 2].original;
+            //refs.modalImg.alt = imagesArray[refModalIndexData - 1 + 2].description;
+            //refs.modalImg.dataset.index = refModalIndexData - 1 + 2;
         } else if (e.key == 'ArrowRight' && refModalIndexData == imgArrLength - 1) {
-            refs.modalImg.src = imagesArray[0].original;
-        refs.modalImg.alt = imagesArray[0].description;
-        refs.modalImg.dataset.index = 0;
+            showNextImg(imagesArray[0], 0);
+            //refs.modalImg.src = imagesArray[0].original;
+            //refs.modalImg.alt = imagesArray[0].description;
+            //refs.modalImg.dataset.index = 0;
         }
     }
 }
